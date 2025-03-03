@@ -138,7 +138,7 @@
 eval 'exec perl -wSx -0777 -pi "$0" "$@"'
      if 0;
 
-my $VERSION = '2025-01-01.07:36'; # UTC
+my $VERSION = '2025-03-01.12:25'; # UTC
 # The definition above must lie within the first 8 lines in order
 # for the Emacs time-stamp write hook (at end) to update it.
 # If you change this file with Emacs, please let the write hook
@@ -172,7 +172,15 @@ my $eol = /(?:^|[^\r])\n/ ? "\n" : "\r\n";
 
 my $stmt_re;
 my $found;
-while (/(^|\n)(.{0,$prefix_max})$copyright_re/cg)
+my $skip;
+
+if ($ARGV =~ /.*test\/manual\/etags\/.*/)
+  {
+    print STDERR "$ARGV: not changing test data\n";
+    $skip = 1;
+  }
+
+while (!$skip && /(^|\n)(.{0,$prefix_max})$copyright_re/cg)
   {
     my $pos=pos();
     my $leading = "$1$2";
@@ -288,7 +296,7 @@ while (/(^|\n)(.{0,$prefix_max})$copyright_re/cg)
       }
   }
 
-if (!$found)
+if (!$skip && !$found)
   {
     print STDERR "$ARGV: warning: copyright statement not found\n";
   }
