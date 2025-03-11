@@ -7256,10 +7256,8 @@ add_regex (char *regexp_pattern, language *lang)
   else
     pat = regexp_pattern;
 
-  if (single_line)
-    re_set_syntax (RE_SYNTAX_EMACS | RE_DOT_NEWLINE);
-  else
-    re_set_syntax (RE_SYNTAX_EMACS);
+  re_set_syntax (RE_CHAR_CLASSES | RE_INTERVALS |
+		 (single_line ? 0 : RE_DOT_NEWLINE));
 
   err = re_compile_pattern (pat, strlen (pat), patbuf);
   if (multi_line)
